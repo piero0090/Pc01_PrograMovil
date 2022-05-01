@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_green_dark"
+    android:background="@drawable/img"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity">  <!--Layout principal-->
 
     <LinearLayout
         android:id="@+id/areaTurno"
@@ -18,7 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="3"> <!--Cartas-->
 
         <LinearLayout
             android:id="@+id/jugadorA"
@@ -48,6 +48,7 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:gravity="left"
+            android:background="@drawable/img_3"
             android:orientation="horizontal">
 
         </LinearLayout>
@@ -70,7 +71,7 @@
         android:layout_marginBottom="5dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"> <!--Botones-->
 
         <Button
             android:id="@+id/butPasar"
@@ -94,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="3">
+        android:layout_weight="3"> <!--Deck-->
            <LinearLayout
             android:id="@+id/areaCartas"
             android:layout_height="wrap_content"

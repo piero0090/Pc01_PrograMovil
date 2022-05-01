@@ -3,11 +3,9 @@ package com.example.ocholocos
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.view.isEmpty
 import com.example.ocholocos.views.*
 
 class MainActivity : AppCompatActivity() {
@@ -16,60 +14,74 @@ class MainActivity : AppCompatActivity() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        getSupportActionBar()?.hide();
+        getSupportActionBar()?.hide()
         juego()
     }
-    var baraja : Baraja? = null;
-    var cartaVolteada : Carta? = null;
-    var jugador1 : Jugador? = null;
-    var jugador2 : Jugador? = null;
-    var jugador3 : Jugador? = null;
-    var jugadores = ArrayList<Jugador>();
-    var turno : Turno? = null;
-    var puedeLanzarSim : Boolean = true;
-    var puedeLanzarNum : Boolean = true;
-    var jugarK : Int = 0;
-    var jugarJ : Boolean = false;
-    var butPasar : Button? = null;
-    var butRobar : Button? = null;
+    var deck : Deck? = null
+    var lastcard : Cards? = null
+    var plyr01 : Player? = null
+    var plyr02 : Player? = null
+    var plyr03 : Player? = null
+    var plyrs = ArrayList<Player>()
+    var turn : Turn? = null
+    var matchPalo : Boolean = true
+    var matchValor : Boolean = true
+    var trece : Int = 0
+    var jack : Boolean = false
+    var butPasar : Button? = null
+    var butRobar : Button? = null
+
+    private fun generarDeck() {
+        var palos = arrayOf("diamante","trebol", "espada","corazon");
+        for(i in palos){
+            for(j in 1..13){
+                var card = Cards(this, j, i);
+                card.setOnClickListener{
+                    dejarCarta(card);
+                }
+                deck!!.cards.add(card);
+            }
+        }
+        deck!!.cards.shuffle();
+    }
 
     private fun juego() {
-        baraja = Baraja(this);
-        generarBaraja();
-        jugador1 = repartirCartas(Jugador(this, 1));
-        jugador2 = repartirCartas(Jugador(this, 2));
-        jugador3 = repartirCartas(Jugador(this, 3));
-        sacarCartaBaraja();
-        var jugadorA = findViewById<LinearLayout>(R.id.jugadorA);
-        var jugadorB = findViewById<LinearLayout>(R.id.jugadorB);
-        var areaTurno = findViewById<LinearLayout>(R.id.areaTurno);
-        var areaMano = findViewById<LinearLayout>(R.id.areaMano);
+        deck = Deck(this);
+        generarDeck();
+        plyr01 = repartirCartas(Player(this, 1))
+        plyr02 = repartirCartas(Player(this, 2))
+        plyr03 = repartirCartas(Player(this, 3))
+        sacarCartaBaraja()
+        var plyrA = findViewById<LinearLayout>(R.id.jugadorA);
+        var plyrB = findViewById<LinearLayout>(R.id.jugadorB);
+        var areaturn = findViewById<LinearLayout>(R.id.areaTurno);
+        var areamano = findViewById<LinearLayout>(R.id.areaMano);
         var areaCartaVolteada = findViewById<LinearLayout>(R.id.areaCartaVolteada);
-        turno = Turno(this);
+        turn = Turn(this);
 
-        jugadores.add(jugador1!!);
-        jugadores.add(jugador2!!);
-        jugadores.add(jugador3!!);
+        plyrs.add(plyr01!!)
+        plyrs.add(plyr02!!)
+        plyrs.add(plyr03!!)
 
-        jugadorA.addView(jugador2);
-        jugadorB.addView(jugador3);
-        areaTurno.addView(turno);
-        areaMano.addView(baraja!!);
-        areaCartaVolteada.addView(cartaVolteada);
-        mostrarCartas();
+        plyrA.addView(plyr02);
+        plyrB.addView(plyr03);
+        areaturn.addView(turn);
+        areamano.addView(deck!!);
+        areaCartaVolteada.addView(lastcard);
+        mostrarCartas()
 
         butPasar = findViewById<Button>(R.id.butPasar);
         butRobar = findViewById<Button>(R.id.butRobar);
 
         butPasar!!.setOnClickListener{
-            if(jugarJ==false){
+            if(jack==false){
                 pasarTurno();
                 mostrarCartas();
             }else{
                 pasarTurno();
                 pasarTurno();
                 mostrarCartas();
-                jugarJ=false;
+                jack=false;
             }
             butPasar!!.isEnabled = false;
             butRobar!!.isEnabled= true;
@@ -79,184 +91,172 @@ class MainActivity : AppCompatActivity() {
 
         butRobar!!.setOnClickListener{
             sacarCartaJugador();
-            if(jugarK>0){
-                for(i in 1..jugarK*3){
-                    sacarCartaJugador();
+            if(trece>0){
+                for(i in 1..trece*3){
+                    sacarCartaJugador()
                 }
-                jugarK=0;
+                trece=0
             }
-            butPasar!!.isEnabled = true;
-            butRobar!!.isEnabled= false;
+            butPasar!!.isEnabled = true
+            butRobar!!.isEnabled= false
         }
     }
 
     private fun sacarCartaBaraja() {
-        cartaVolteada = baraja!!.cartas[0];
-        baraja!!.cartas.remove(baraja!!.cartas[0]);
+        lastcard = deck!!.cards[0]
+        deck!!.cards.remove(deck!!.cards[0])
     }
 
     private fun mostrarCartas() {
         var areaCartas = findViewById<LinearLayout>(R.id.areaCartas);
-        var jugadorA = findViewById<LinearLayout>(R.id.jugadorA);
-        var jugadorB = findViewById<LinearLayout>(R.id.jugadorB);
+        var plyA = findViewById<LinearLayout>(R.id.jugadorA);
+        var plyB = findViewById<LinearLayout>(R.id.jugadorB);
         areaCartas.removeAllViews();
-        jugadorA.removeAllViews();
-        jugadorB.removeAllViews();
-        var isEmpty = true;
-        for (i in jugadores){
-            if(i.id == turno!!.turnJugador){
-                for(j in i.Mano){
+        plyA.removeAllViews();
+        plyB.removeAllViews();
+        var isEmpty = true
+        for (i in plyrs){
+            if(i.id == turn!!.playerturn){
+                for(j in i.ManoPlayer){
                     areaCartas.addView(j)
                 }
             }else {
                 if(isEmpty){
-                    jugadorA.addView(i)
+                    plyA.addView(i)
                     isEmpty =false
                 }else{
-                    jugadorB.addView(i)
+                    plyB.addView(i)
                 }
             }
         }
     }
 
-    private fun generarBaraja() {
-        var simbolos = arrayOf("diamante","trebol", "espada","corazon");
-        for(i in simbolos){
-            for(j in 1..13){
-                var carta = Carta(this, j, i);
-                carta.setOnClickListener{
-                    dejarCarta(carta);
-                }
-                baraja!!.cartas.add(carta);
-            }
-        }
-        baraja!!.cartas.shuffle();
-    }
 
-    private fun dejarCarta(carta : Carta) {
-        if(puedeLanzarSim or puedeLanzarNum){
+
+    private fun dejarCarta(carta : Cards) {
+        if(matchPalo or matchValor){
             var areaCartas = findViewById<LinearLayout>(R.id.areaCartas);
             var areaCartaVolteada = findViewById<LinearLayout>(R.id.areaCartaVolteada);
-            if((carta.simbolo == cartaVolteada!!.simbolo) and puedeLanzarSim ){
-                if(jugarK>0){
-                    for(i in 1..jugarK*3){
+            if((carta.palo == lastcard!!.palo) and matchPalo ){
+                if(trece>0){
+                    for(i in 1..trece*3){
                         sacarCartaJugador();
                     }
-                    jugarK=0;
+                    trece=0
                 }
-                if(carta.numero== 13){
-                    jugarK = jugarK.plus(1);
+                if(carta.valor== 13){
+                    trece = trece.plus(1);
                 }
-                else if(carta.numero== 11){
-                    jugarJ = true;
+                else if(carta.valor== 11){
+                    jack = true
                 }
-                baraja!!.cartas.add(cartaVolteada!!);
-                for (i in jugadores){
-                    if(i.id == turno!!.turnJugador){
-                        i.Mano.remove(carta);
+                deck!!.cards.add(lastcard!!);
+                for (i in plyrs){
+                    if(i.id == turn!!.playerturn){
+                        i.ManoPlayer.remove(carta)
                     }
                 }
-                puedeLanzarSim=false;
-                butPasar!!.isEnabled = true;
-                butRobar!!.isEnabled= false;
-                cartaVolteada = carta;
-                areaCartas.removeView(carta);
-                areaCartaVolteada.removeAllViews();
-                areaCartaVolteada.addView(cartaVolteada);
+                matchPalo=false
+                butPasar!!.isEnabled = true
+                butRobar!!.isEnabled= false
+                lastcard = carta
+                areaCartas.removeView(carta)
+                areaCartaVolteada.removeAllViews()
+                areaCartaVolteada.addView(lastcard)
 
             }
-            else if((carta.numero == cartaVolteada!!.numero) and puedeLanzarNum){
-                if(jugarK>0){
-                    if(carta.numero== 13){
-                        jugarK = jugarK.plus(1);
+            else if((carta.valor == lastcard!!.valor) and matchValor){
+                if(trece>0){
+                    if(carta.valor== 13){
+                        trece = trece.plus(1)
                     }
                     else {
-                        for(i in 1..jugarK*3){
-                            sacarCartaJugador();
+                        for(i in 1..trece*3){
+                            sacarCartaJugador()
                         }
-                        if(carta.numero== 11){
-                            jugarJ = true;
+                        if(carta.valor== 11){
+                            jack = true
                         }
-                        baraja!!.cartas.add(cartaVolteada!!);
-                        for (i in jugadores){
-                            if(i.id == turno!!.turnJugador){
-                                i.Mano.remove(carta);
+                        deck!!.cards.add(lastcard!!);
+                        for (i in plyrs){
+                            if(i.id == turn!!.playerturn){
+                                i.ManoPlayer.remove(carta);
                             }
                         }
-                        puedeLanzarSim=false;
-                        jugarK=0;
+                        matchPalo=false
+                        trece=0
                     }
                 }
                 else {
-                    if(carta.numero== 13){
-                        jugarK = jugarK.plus(1);
+                    if(carta.valor== 13){
+                        trece = trece.plus(1);
                     }
-                    else if(carta.numero== 11){
-                        jugarJ = true;
+                    else if(carta.valor== 11){
+                        jack = true
                     }
-                    baraja!!.cartas.add(cartaVolteada!!);
-                    for (i in jugadores){
-                        if(i.id == turno!!.turnJugador){
-                            i.Mano.remove(carta);
+                    deck!!.cards.add(lastcard!!)
+                    for (i in plyrs){
+                        if(i.id == turn!!.playerturn){
+                            i.ManoPlayer.remove(carta)
                         }
                     }
-                    puedeLanzarSim=false;
+                    matchPalo=false
                 }
-                butPasar!!.isEnabled = true;
-                butRobar!!.isEnabled= false;
-                cartaVolteada = carta;
-                areaCartas.removeView(carta);
-                areaCartaVolteada.removeAllViews();
-                areaCartaVolteada.addView(cartaVolteada);
+                butPasar!!.isEnabled = true
+                butRobar!!.isEnabled= false
+                lastcard = carta
+                areaCartas.removeView(carta)
+                areaCartaVolteada.removeAllViews()
+                areaCartaVolteada.addView(lastcard)
 
             }
 
         }
-        for (i in jugadores){
-            if((i.id == turno!!.turnJugador) and (i.Mano.size == 1)){
-                Toast.makeText(applicationContext, "El jugador "+turno!!.turnJugador+" va por una", Toast.LENGTH_SHORT).show()
+        for (i in plyrs){
+            if((i.id == turn!!.playerturn) and (i.ManoPlayer.size == 1)){
+                Toast.makeText(applicationContext, "El jugador "+turn!!.playerturn+" va por una", Toast.LENGTH_SHORT).show()
             }
-            else if((i.id == turno!!.turnJugador) and (i.Mano.size == 0)){
-                butPasar!!.isEnabled = false;
-                butRobar!!.isEnabled= false;
-                var areaTurno = findViewById<LinearLayout>(R.id.areaTurno);
-                var ganador = Turno(this);
-                ganador.turnJugador = 4;
-                ganador.frase = "El jugador "+turno!!.turnJugador+" gana!!"
-                areaTurno.removeAllViews();
-                areaTurno.addView(ganador);
+            else if((i.id == turn!!.playerturn) and (i.ManoPlayer.size == 0)){
+                butPasar!!.isEnabled = false
+                butRobar!!.isEnabled= false
+                var areaTurno = findViewById<LinearLayout>(R.id.areaTurno)
+                var ganador = Turn(this)
+                ganador.playerturn = 4
+                ganador.mensajeturn = "El jugador "+turn!!.playerturn+" gana!!"
+                areaTurno.removeAllViews()
+                areaTurno.addView(ganador)
 
             }
         }
 
     }
 
-    private fun repartirCartas(jugador: Jugador) : Jugador {
+    private fun repartirCartas(player: Player) : Player {
 
         for(i in 1..7){
-            jugador.Mano.add(baraja!!.cartas[i])
-            baraja!!.cartas.remove(baraja!!.cartas[i]);
+            player.ManoPlayer.add(deck!!.cards[i])
+            deck!!.cards.remove(deck!!.cards[i])
         }
-        return jugador;
+        return player;
     }
     private fun pasarTurno() {
-        turno!!.siguienteJugador();
-        var areaTurno = findViewById<LinearLayout>(R.id.areaTurno);
+        turn!!.Jugadornext();
+        var areaturn = findViewById<LinearLayout>(R.id.areaTurno);
 
-        areaTurno.removeAllViews();
-        areaTurno.addView(turno);
-        puedeLanzarSim=true;
-        puedeLanzarNum=true;
+        areaturn.removeAllViews()
+        areaturn.addView(turn)
+        matchPalo=true
+        matchValor=true
 
     }
 
     private fun sacarCartaJugador() {
-        var areaCartas = findViewById<LinearLayout>(R.id.areaCartas);
-        for (i in jugadores){
-            if(i.id == turno!!.turnJugador){
-                i.Mano.add(baraja!!.cartas[0]);
-                areaCartas.addView(baraja!!.cartas[0]);
-                baraja!!.cartas.remove(baraja!!.cartas[0]);
+        var areaCartas = findViewById<LinearLayout>(R.id.areaCartas)
+        for (i in plyrs){
+            if(i.id == turn!!.playerturn){
+                i.ManoPlayer.add(deck!!.cards[0])
+                areaCartas.addView(deck!!.cards[0])
+                deck!!.cards.remove(deck!!.cards[0])
             }
         }
 

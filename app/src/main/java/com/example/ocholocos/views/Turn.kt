@@ -9,10 +9,10 @@ import android.util.AttributeSet
 import android.view.View
 import com.example.ocholocos.R
 
-class Turno : View {
-    var turnJugador : Int = 1;
-    var frase : String = "Turno del jugador "
-    private var size: Int = 0;
+class Turn : View {
+    var playerturn : Int = 1;
+    var mensajeturn : String = "Le toca al jugador "
+    private var tam: Int = 0;
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         val atribute: TypedArray = context.theme.obtainStyledAttributes(
@@ -25,36 +25,36 @@ class Turno : View {
 
     constructor(context: Context) : super(context) {
     }
-    fun siguienteJugador() {
-        if(turnJugador<3)
-        turnJugador = turnJugador.plus(1)
+    fun Jugadornext() {
+        if(playerturn<3)
+            playerturn = playerturn.plus(1)
         else {
-            turnJugador = 1
+            playerturn = 1
         }
     }
     fun saltarJugador(){
-        siguienteJugador();
-        siguienteJugador();
+        Jugadornext()
+        Jugadornext()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val width = View.MeasureSpec.getSize(widthMeasureSpec);
-        val height = View.MeasureSpec.getSize(heightMeasureSpec);
-        size = Math.min(width, height);
-        setMeasuredDimension(3*size, size)
+        val tnwth = View.MeasureSpec.getSize(widthMeasureSpec);
+        val tnhght = View.MeasureSpec.getSize(heightMeasureSpec);
+        tam = Math.min(tnwth, tnhght);
+        setMeasuredDimension(3*tam, tam)
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas);
-        var paintText = Paint(Paint.ANTI_ALIAS_FLAG)
-        paintText.color = Color.BLACK
-        paintText.textSize = size / 3f;
-        if(turnJugador<4){
-            canvas?.drawText((frase+turnJugador).toString(), size / 12f, size / 2f, paintText)
+        var painttxt = Paint(Paint.ANTI_ALIAS_FLAG)
+        painttxt.color = Color.BLACK
+        painttxt.textSize = tam / 3f
+        if(playerturn<4){
+            canvas?.drawText((mensajeturn+playerturn).toString(), tam / 12f, tam / 2f, painttxt)
         }
         else {
-            canvas?.drawText((frase).toString(), size / 12f, size / 2f, paintText)
+            canvas?.drawText((mensajeturn).toString(), tam / 12f, tam / 2f, painttxt)
         }
 
     }
