@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Carta">
+        <attr name="valueNum" format="integer"/>
+        <attr name="valueSim" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="Jugador">
+        <attr name="valueId" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="Turno">
+        <attr name="valueFrase" format="integer"/>
+    </declare-styleable>
+</resources>
