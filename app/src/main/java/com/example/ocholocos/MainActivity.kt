@@ -7,6 +7,9 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.ocholocos.views.*
+import android.graphics.Typeface
+import androidx.core.content.res.ResourcesCompat
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         getSupportActionBar()?.hide()
         juego()
+
     }
     var deck : Deck? = null
     var lastcard : Cards? = null
