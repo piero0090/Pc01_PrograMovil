@@ -53,6 +53,8 @@ class Player : View {
         painttxt.color = Color.WHITE
         painttxt.textSize = tam / 11f
         canvas?.drawText("Player " + id.toString(), tam / 4f, 3 * tam / 8f, painttxt)
+        canvas?.drawText("Jugador " + id.toString(), tam / 4f, 3 * tam / 8f, painttxt)
+
         if(ManoPlayer == null){
             canvas?.drawText("Numero de cartas: 0", tam / 20f, 5 * tam / 8f, painttxt)
         }
