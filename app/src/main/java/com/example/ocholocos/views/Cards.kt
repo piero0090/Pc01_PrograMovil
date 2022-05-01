@@ -197,7 +197,7 @@ class Cards:View {
             }
         }
 
-       canvas?.drawBitmap(foto!!,null, Rect(tam/10, tam/10, 4*tam/4,5*tam/5), pint)
+       canvas?.drawBitmap(foto!!,null, Rect(tam/15, tam/15, 7*tam/8,5*tam/5), pint)
 
 
     }
