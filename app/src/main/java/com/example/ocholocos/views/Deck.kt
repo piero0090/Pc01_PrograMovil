@@ -31,7 +31,7 @@ class Deck:View  {
     }
     override fun onDraw(canvas: Canvas?){
 
-        var pic : Bitmap? = BitmapFactory.decodeResource(resources,R.drawable.yugi)
+        var pic : Bitmap? = BitmapFactory.decodeResource(resources,R.drawable.img_3)
         canvas?.drawBitmap(pic!!,null,Rect(0, 0, 2*tam/3,(tam*1.25f).toInt()), pint)
         pint.color = Color.BLACK
         pint.style = Paint.Style.STROKE

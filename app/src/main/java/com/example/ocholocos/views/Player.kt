@@ -17,9 +17,7 @@ class Player : View {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         val atribute: TypedArray = context!!.theme.obtainStyledAttributes(
             attrs,
-            R.styleable.Jugador,
-            0,
-            0
+            R.styleable.Jugador, 0, 0
         )
         id = atribute.getInteger(R.styleable.Carta_valueNum, 1);
     }
@@ -38,22 +36,23 @@ class Player : View {
     }
 
     override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
+        super.onDraw(canvas) //Pintado de circulo
         pint.style = Paint.Style.FILL
-        pint.color = Color.WHITE
+        pint.color = Color.argb(255,205,60,0)
         val radio = tam / 2
         canvas?.drawCircle(tam / 2f, tam / 2f, radio.toFloat(), pint)
 
 
         pint.style = Paint.Style.STROKE
-        pint.color = Color.BLACK
+        pint.color = Color.WHITE
         pint.setStrokeWidth(tam /38f)
         canvas?.drawCircle(tam / 2f, tam / 2f, radio.toFloat() - 2f, pint)
 
+        //Pintado de texto dentro
         var painttxt = Paint(Paint.ANTI_ALIAS_FLAG)
-        painttxt.color = Color.BLACK
+        painttxt.color = Color.WHITE
         painttxt.textSize = tam / 11f
-        canvas?.drawText("Jugador " + id.toString(), tam / 4f, 3 * tam / 8f, painttxt)
+        canvas?.drawText("Player " + id.toString(), tam / 4f, 3 * tam / 8f, painttxt)
         if(ManoPlayer == null){
             canvas?.drawText("Numero de cartas: 0", tam / 20f, 5 * tam / 8f, painttxt)
         }

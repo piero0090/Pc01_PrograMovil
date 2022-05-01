@@ -10,4 +10,8 @@
     <declare-styleable name="Turno">
         <attr name="valueFrase" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="Imagecustomvie" >
+         <attr name="ratio" format="float"/>
+    </declare-styleable>
 </resources>

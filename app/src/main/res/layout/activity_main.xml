@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,9 +27,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal">
-
-        </LinearLayout>
+            android:orientation="horizontal"/>
 
         <LinearLayout
             android:id="@+id/areaCartaVolteada"
@@ -48,7 +47,6 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:gravity="left"
-            android:background="@drawable/img_3"
             android:orientation="horizontal">
 
         </LinearLayout>
@@ -59,9 +57,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="horizontal">>
-
-        </LinearLayout>
+            android:orientation="horizontal"/>
     </LinearLayout>
 
     <LinearLayout
@@ -80,16 +76,18 @@
             android:layout_height="46dp"
             android:insetLeft="20dp"
             android:insetRight="20dp"
-            android:text="Pasar" />
+            android:text="Pasar"
+            app:backgroundTint="#AB20C3" />
 
         <Button
-            android:id="@+id/butRobar"
+            android:id="@+id/butTomar"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
             android:insetLeft="20dp"
             android:insetRight="20dp"
-            android:text="Robar" />
+            android:text="Tomar"
+            app:backgroundTint="#BA3232" />
     </LinearLayout>
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -100,8 +98,8 @@
             android:id="@+id/areaCartas"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-              android:orientation="horizontal"
-                 android:layout_gravity="center_horizontal"
+               android:orientation="horizontal"
+               android:layout_gravity="center_horizontal"
                android:gravity="center_horizontal">
         </LinearLayout>
     </HorizontalScrollView>

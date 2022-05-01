@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     var trece : Int = 0
     var jack : Boolean = false
     var butPasar : Button? = null
-    var butRobar : Button? = null
+    var butTomar : Button? = null
 
     private fun generarDeck() {
         var palos = arrayOf("diamante","trebol", "espada","corazon");
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         mostrarCartas()
 
         butPasar = findViewById<Button>(R.id.butPasar);
-        butRobar = findViewById<Button>(R.id.butRobar);
+        butTomar = findViewById<Button>(R.id.butTomar);
 
         butPasar!!.setOnClickListener{
             if(jack==false){
@@ -84,12 +84,12 @@ class MainActivity : AppCompatActivity() {
                 jack=false;
             }
             butPasar!!.isEnabled = false;
-            butRobar!!.isEnabled= true;
+            butTomar!!.isEnabled= true;
 
         };
         butPasar!!.isEnabled = false;
 
-        butRobar!!.setOnClickListener{
+        butTomar!!.setOnClickListener{
             sacarCartaJugador();
             if(trece>0){
                 for(i in 1..trece*3){
@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                 trece=0
             }
             butPasar!!.isEnabled = true
-            butRobar!!.isEnabled= false
+            butTomar!!.isEnabled= false
         }
     }
 
@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 matchPalo=false
                 butPasar!!.isEnabled = true
-                butRobar!!.isEnabled= false
+                butTomar!!.isEnabled= false
                 lastcard = carta
                 areaCartas.removeView(carta)
                 areaCartaVolteada.removeAllViews()
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
                     matchPalo=false
                 }
                 butPasar!!.isEnabled = true
-                butRobar!!.isEnabled= false
+                butTomar!!.isEnabled= false
                 lastcard = carta
                 areaCartas.removeView(carta)
                 areaCartaVolteada.removeAllViews()
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity() {
             }
             else if((i.id == turn!!.playerturn) and (i.ManoPlayer.size == 0)){
                 butPasar!!.isEnabled = false
-                butRobar!!.isEnabled= false
+                butTomar!!.isEnabled= false
                 var areaTurno = findViewById<LinearLayout>(R.id.areaTurno)
                 var ganador = Turn(this)
                 ganador.playerturn = 4
@@ -259,8 +259,6 @@ class MainActivity : AppCompatActivity() {
                 deck!!.cards.remove(deck!!.cards[0])
             }
         }
-
-
     }
 
 }

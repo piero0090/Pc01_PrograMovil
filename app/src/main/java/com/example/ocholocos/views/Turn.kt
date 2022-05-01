@@ -48,7 +48,7 @@ class Turn : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas);
         var painttxt = Paint(Paint.ANTI_ALIAS_FLAG)
-        painttxt.color = Color.BLACK
+        painttxt.color = Color.WHITE
         painttxt.textSize = tam / 3f
         if(playerturn<4){
             canvas?.drawText((mensajeturn+playerturn).toString(), tam / 12f, tam / 2f, painttxt)

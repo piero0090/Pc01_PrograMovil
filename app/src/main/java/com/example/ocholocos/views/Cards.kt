@@ -16,9 +16,7 @@ class Cards:View {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         val atribute : TypedArray = context!!.theme.obtainStyledAttributes(
             attrs,
-            R.styleable.Carta,
-            0,
-            0)
+            R.styleable.Carta, 0, 0)
         valor = atribute.getInteger(R.styleable.Carta_valueNum, 2)
         palo = atribute.getString(R.styleable.Carta_valueSim)
     }
@@ -31,13 +29,15 @@ class Cards:View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val wth = View.MeasureSpec.getSize(widthMeasureSpec)
         val hght = View.MeasureSpec.getSize(heightMeasureSpec)
-        tam = Math.min(wth, hght);
+        tam = Math.min(wth, hght)
         setMeasuredDimension(2*tam/3, (tam*1.75f).toInt())
     }
     override fun onDraw(canvas: Canvas?){
+        //Cod armar cuadro blanco
         super.onDraw(canvas)
         pint.color = Color.WHITE
         pint.style = Paint.Style.FILL
+     //   val wallpaper= RectF( 0f,tam*1.75f,2f*tam/3f,0f) coordenadas de los cuadros
         val wallpaper= RectF( 0f,tam*1.75f,2f*tam/3f,0f);
         canvas?.drawRect(wallpaper,pint)
 
@@ -45,7 +45,8 @@ class Cards:View {
         pint.color = Color.BLACK
         pint.style = Paint.Style.STROKE
 
-        val borders= RectF( 0f,tam*1.75f,2f*tam/3f,0f);
+       // val borders= RectF( 0f,tam*1.75f,2f*tam/3f,0f)
+        val borders= RectF( 0f,tam*1.75f,2f*tam/3f,0f)
         canvas?.drawRect(borders,pint)
 
        /* if(valor != 0) {
@@ -66,7 +67,7 @@ class Cards:View {
             }
 
         }*/
-        var foto : Bitmap? = null;
+        var foto : Bitmap? = null
         if(palo=="espada" ){
             if(valor==1 ){
                 foto = BitmapFactory.decodeResource(resources,R.drawable.espadaas)
@@ -196,7 +197,7 @@ class Cards:View {
             }
         }
 
-       canvas?.drawBitmap(foto!!,null, Rect(tam/6, 2*tam/5, tam/2,4*tam/5), pint)
+       canvas?.drawBitmap(foto!!,null, Rect(tam/10, tam/10, 4*tam/4,5*tam/5), pint)
 
 
     }
